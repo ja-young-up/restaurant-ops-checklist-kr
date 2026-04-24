@@ -567,6 +567,7 @@ const checklistData = [
 const categoryTemplate = document.querySelector("#categoryTemplate");
 const subgroupTemplate = document.querySelector("#subgroupTemplate");
 const itemTemplate = document.querySelector("#itemTemplate");
+const detailTemplate = document.querySelector("#detailTemplate");
 const checklistContainer = document.querySelector("#checklistContainer");
 const categoryNav = document.querySelector("#categoryNav");
 const sourcesContainer = document.querySelector("#sourcesContainer");
@@ -580,7 +581,8 @@ const categoryCount = document.querySelector("#categoryCount");
 const itemCount = document.querySelector("#itemCount");
 const progressPercent = document.querySelector("#progressPercent");
 
-const flatItems = [];
+const flatChecks = [];
+const itemRecords = [];
 const categoryStats = new Map();
 let state = loadState();
 
@@ -595,9 +597,13 @@ collapseAllBtn.addEventListener("click", () => setAllCategories(false));
 resetBtn.addEventListener("click", () => {
   state = {};
   persistState();
-  document.querySelectorAll('.item input[type="checkbox"]').forEach((input) => {
-    input.checked = false;
-    input.closest(".item").classList.remove("is-complete");
+  itemRecords.forEach((record) => {
+    setCheckboxValue(record.parentCheckbox, false);
+    record.parentCheckbox.indeterminate = false;
+    record.detailCheckboxes.forEach((checkbox) => {
+      setCheckboxValue(checkbox, false);
+    });
+    updateItemVisualState(record);
   });
   onlyUnchecked.checked = false;
   applyFilters();
@@ -624,11 +630,8 @@ function render() {
     title.textContent = category.title;
     description.textContent = category.description;
 
-    const categoryItemCount = category.groups.reduce(
-      (sum, group) => sum + group.items.length,
-      0
-    );
-    count.textContent = `${categoryItemCount}개 항목`;
+    const categoryCheckCount = countCategoryChecks(category);
+    count.textContent = `${categoryCheckCount}개 체크`;
 
     const progressCard = document.createElement("article");
     progressCard.className = "section-progress__card";
@@ -638,7 +641,7 @@ function render() {
           <h3>${category.title}</h3>
           <p>${category.eyebrow}</p>
         </div>
-        <span class="section-progress__numbers">0 / ${categoryItemCount}</span>
+        <span class="section-progress__numbers">0 / ${categoryCheckCount}</span>
       </div>
       <div class="section-progress__bar">
         <span class="section-progress__fill"></span>
@@ -659,10 +662,11 @@ function render() {
       group.items.forEach((item, itemIndex) => {
         const itemId = `${category.id}-${slugify(group.title)}-${itemIndex}`;
         const itemNode = itemTemplate.content.firstElementChild.cloneNode(true);
-        const checkbox = itemNode.querySelector('input[type="checkbox"]');
+        const parentCheckbox = itemNode.querySelector('input[type="checkbox"]');
         const itemTitle = itemNode.querySelector(".item__title");
         const details = itemNode.querySelector(".item__details");
         const refs = itemNode.querySelector(".item__refs");
+        const detailCheckboxes = [];
 
         itemNode.dataset.search = [
           category.title,
@@ -674,16 +678,30 @@ function render() {
           .toLowerCase();
         itemNode.dataset.itemId = itemId;
 
-        checkbox.checked = Boolean(state[itemId]);
         itemTitle.textContent = item.title;
+        parentCheckbox.dataset.checkId = `${itemId}-parent`;
+        flatChecks.push(parentCheckbox);
 
-        if (checkbox.checked) {
-          itemNode.classList.add("is-complete");
-        }
+        item.details.forEach((detail, detailIndex) => {
+          const detailNode = detailTemplate.content.firstElementChild.cloneNode(true);
+          const detailCheckbox = detailNode.querySelector('input[type="checkbox"]');
+          const detailText = detailNode.querySelector(".detail-item__text");
+          const detailId = `${itemId}-detail-${detailIndex}`;
 
-        item.details.forEach((detail) => {
-          const detailNode = document.createElement("li");
-          detailNode.textContent = detail;
+          detailNode.dataset.search = [
+            category.title,
+            group.title,
+            item.title,
+            detail,
+          ]
+            .join(" ")
+            .toLowerCase();
+          detailCheckbox.dataset.checkId = detailId;
+          setCheckboxValue(detailCheckbox, Boolean(state[detailId]));
+          detailNode.classList.toggle("is-complete", detailCheckbox.checked);
+          detailText.textContent = detail;
+          detailCheckboxes.push(detailCheckbox);
+          flatChecks.push(detailCheckbox);
           details.appendChild(detailNode);
         });
 
@@ -698,18 +716,51 @@ function render() {
           refs.appendChild(refLink);
         });
 
-        checkbox.addEventListener("change", () => {
-          state[itemId] = checkbox.checked;
-          if (!checkbox.checked) {
-            delete state[itemId];
+        const record = {
+          categoryId: category.id,
+          itemId,
+          node: itemNode,
+          parentCheckbox,
+          detailCheckboxes,
+        };
+
+        setCheckboxValue(
+          parentCheckbox,
+          detailCheckboxes.length > 0
+            ? detailCheckboxes.every((checkbox) => checkbox.checked)
+            : Boolean(state[parentCheckbox.dataset.checkId])
+        );
+        updateItemVisualState(record);
+
+        parentCheckbox.addEventListener("change", () => {
+          if (detailCheckboxes.length > 0) {
+            detailCheckboxes.forEach((checkbox) => {
+              setCheckboxValue(checkbox, parentCheckbox.checked);
+            });
+          } else {
+            updateState(parentCheckbox.dataset.checkId, parentCheckbox.checked);
           }
-          itemNode.classList.toggle("is-complete", checkbox.checked);
+          updateItemVisualState(record);
           persistState();
           applyFilters();
           updateSummary();
         });
 
-        flatItems.push(itemNode);
+        detailCheckboxes.forEach((checkbox) => {
+          checkbox.addEventListener("change", () => {
+            updateState(checkbox.dataset.checkId, checkbox.checked);
+            checkbox.closest(".detail-item").classList.toggle(
+              "is-complete",
+              checkbox.checked
+            );
+            updateItemVisualState(record);
+            persistState();
+            applyFilters();
+            updateSummary();
+          });
+        });
+
+        itemRecords.push(record);
         list.appendChild(itemNode);
       });
 
@@ -724,7 +775,7 @@ function render() {
     checklistContainer.appendChild(categoryNode);
 
     categoryStats.set(category.id, {
-      total: categoryItemCount,
+      total: categoryCheckCount,
       status,
       percent,
       fill,
@@ -733,11 +784,11 @@ function render() {
 
     const navLink = document.createElement("a");
     navLink.href = `#${category.id}`;
-    navLink.innerHTML = `<span>${category.title}</span><span>${categoryItemCount}</span>`;
+    navLink.innerHTML = `<span>${category.title}</span><span>${categoryCheckCount}</span>`;
     categoryNav.appendChild(navLink);
   });
 
-  itemCount.textContent = flatItems.length.toString();
+  itemCount.textContent = flatChecks.length.toString();
 
   sources.forEach((source) => {
     const card = document.createElement("article");
@@ -759,10 +810,21 @@ function applyFilters() {
     let visibleCount = 0;
 
     categoryCard.querySelectorAll(".item").forEach((item) => {
-      const matchesSearch = !query || item.dataset.search.includes(query);
-      const isChecked = item.querySelector('input[type="checkbox"]').checked;
-      const matchesChecked = !uncheckedOnly || !isChecked;
-      const visible = matchesSearch && matchesChecked;
+      const parentCheckbox = item.querySelector(".item__top input");
+      const detailNodes = Array.from(item.querySelectorAll(".detail-item"));
+      const parentMatches = !query || item.dataset.search.includes(query);
+      const parentUnchecked = !parentCheckbox.checked || parentCheckbox.indeterminate;
+      const detailVisible = detailNodes.map((detailNode) => {
+        const detailCheckbox = detailNode.querySelector("input");
+        const matchesSearch = !query || detailNode.dataset.search.includes(query);
+        const matchesChecked = !uncheckedOnly || !detailCheckbox.checked;
+        const visible = matchesSearch && matchesChecked;
+        detailNode.classList.toggle("is-hidden", !visible);
+        return visible;
+      });
+      const hasVisibleDetail = detailVisible.some(Boolean);
+      const matchesChecked = !uncheckedOnly || parentUnchecked || hasVisibleDetail;
+      const visible = (parentMatches && matchesChecked) || hasVisibleDetail;
 
       item.classList.toggle("is-hidden", !visible);
       if (visible) visibleCount += 1;
@@ -773,21 +835,17 @@ function applyFilters() {
 }
 
 function updateSummary() {
-  const checkedCount = flatItems.filter((item) =>
-    item.querySelector('input[type="checkbox"]').checked
-  ).length;
+  const checkedCount = flatChecks.filter((checkbox) => checkbox.checked).length;
   const percent =
-    flatItems.length === 0 ? 0 : Math.round((checkedCount / flatItems.length) * 100);
+    flatChecks.length === 0 ? 0 : Math.round((checkedCount / flatChecks.length) * 100);
   progressPercent.textContent = `${percent}%`;
 
   checklistData.forEach((category) => {
-    const categoryCheckedCount = flatItems.filter((item) => {
-      const itemId = item.dataset.itemId || "";
-      return (
-        itemId.startsWith(`${category.id}-`) &&
-        item.querySelector('input[type="checkbox"]').checked
-      );
-    }).length;
+    const categoryCheckedCount = itemRecords.reduce((sum, record) => {
+      if (record.categoryId !== category.id) return sum;
+      const localChecks = [record.parentCheckbox, ...record.detailCheckboxes];
+      return sum + localChecks.filter((checkbox) => checkbox.checked).length;
+    }, 0);
     updateCategoryProgress(category.id, categoryCheckedCount);
   });
 }
@@ -816,6 +874,47 @@ function slugify(value) {
     .toLowerCase()
     .replace(/\s+/g, "-")
     .replace(/[^a-z0-9\-가-힣]/g, "");
+}
+
+function countCategoryChecks(category) {
+  return category.groups.reduce((sum, group) => {
+    return (
+      sum +
+      group.items.reduce((itemSum, item) => itemSum + 1 + item.details.length, 0)
+    );
+  }, 0);
+}
+
+function setCheckboxValue(checkbox, checked) {
+  checkbox.checked = checked;
+  updateState(checkbox.dataset.checkId, checked);
+}
+
+function updateState(key, checked) {
+  if (checked) {
+    state[key] = true;
+    return;
+  }
+
+  delete state[key];
+}
+
+function updateItemVisualState(record) {
+  if (record.detailCheckboxes.length === 0) {
+    record.parentCheckbox.indeterminate = false;
+    record.node.classList.toggle("is-complete", record.parentCheckbox.checked);
+    updateState(record.parentCheckbox.dataset.checkId, record.parentCheckbox.checked);
+    return;
+  }
+
+  const checkedDetails = record.detailCheckboxes.filter((checkbox) => checkbox.checked).length;
+  const allChecked = checkedDetails === record.detailCheckboxes.length;
+  const someChecked = checkedDetails > 0 && !allChecked;
+
+  record.parentCheckbox.checked = allChecked;
+  record.parentCheckbox.indeterminate = someChecked;
+  record.node.classList.toggle("is-complete", allChecked);
+  updateState(record.parentCheckbox.dataset.checkId, allChecked);
 }
 
 function updateCategoryProgress(categoryId, checkedCount) {
