@@ -11,13 +11,23 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=SUIT:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Noto+Serif+KR:wght@600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
     <div class="page-shell">
+      <header class="site-header">
+        <div class="site-header__brand">DCTRIBE OPS</div>
+        <nav class="site-header__nav" aria-label="상단 메뉴">
+          <a href="#checklistContainer">checklist</a>
+          <a href="#sources">sources</a>
+          <a href="#sectionProgressBoard">progress</a>
+          <a href="#categoryNav">categories</a>
+        </nav>
+      </header>
+
       <header class="hero">
         <div class="hero__badge">2026 한국 외식업 실전판</div>
         <div class="hero__content">
@@ -72,12 +82,11 @@
                 체크 초기화
               </button>
             </div>
+            <nav class="quick-nav quick-nav--embedded" aria-label="카테고리 이동">
+              <h2>카테고리</h2>
+              <div id="categoryNav" class="quick-nav__list"></div>
+            </nav>
           </section>
-
-          <nav class="panel quick-nav" aria-label="카테고리 이동">
-            <h2>카테고리</h2>
-            <div id="categoryNav" class="quick-nav__list"></div>
-          </nav>
         </aside>
 
         <section class="content">
