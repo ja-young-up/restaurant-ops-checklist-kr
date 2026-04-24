@@ -2,571 +2,561 @@ const STORAGE_KEY = "restaurant-checklist-state-v1";
 
 const sources = [
   {
-    id: "src-opening-report",
-    title: "찾기쉬운 생활법령정보 - 음식점 영업신고",
+    id: "src-place-stats",
+    title: "네이버 스마트플레이스 사업주 고객센터 - 플레이스 통계 안내",
     note:
-      "일반음식점·휴게음식점·제과점 등은 영업 종류별·영업소별 신고 대상이라는 점을 기준으로 오픈 준비 항목을 구성했습니다.",
-    url: "https://m.easylaw.go.kr/MOB/CsmInfoRetrieve.laf?csmSeq=839&ccfNo=5&cciNo=1&cnpClsNo=1",
+      "플레이스 유입 수, 성별·연령, 시간·요일, 유입 채널·검색 키워드를 볼 수 있다는 점을 근거로 신규 유입과 전환 점검 항목을 재구성했습니다.",
+    url: "https://help.naver.com/service/30026/contents/20527?osType=PC",
   },
   {
-    id: "src-health",
-    title: "찾기쉬운 생활법령정보 - 건강진단",
+    id: "src-place-report",
+    title: "네이버 스마트플레이스 사업주 고객센터 - 플레이스 리포트 안내",
     note:
-      "영업 시작 전 건강진단, 직접 종사자 대상, 미수검자 종사 금지, 연 1회 점검 기준을 반영했습니다.",
-    url: "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?ccfNo=4&cciNo=1&cnpClsNo=1&csmSeq=839&popMenu=ov",
+      "사업주가 정기적으로 확인할 수 있는 플레이스 리포트 기능을 바탕으로 주간 점검 루틴 항목을 만들었습니다.",
+    url: "https://help.naver.com/service/30026/contents/20524?lang=ko",
   },
   {
-    id: "src-hygiene-edu",
-    title: "찾기쉬운 생활법령정보 - 식품위생교육",
+    id: "src-review-rules",
+    title: "네이버 스마트플레이스 사업주 고객센터 - 방문자 리뷰 노출 기준 안내",
     note:
-      "식품접객업 신규 6시간 교육과 매년 위생교육 의무를 바탕으로 위생 카테고리를 설계했습니다.",
-      url: "https://m.easylaw.go.kr/MOB/CsmInfoRetrieve.laf?csmSeq=839&ccfNo=4&cciNo=1&cnpClsNo=2",
+      "방문 인증 리뷰와 비정상 리뷰 기준을 참고해 리뷰 운영을 어뷰징이 아닌 정상 전환 구조로 관리하도록 체크리스트를 구성했습니다.",
+    url: "https://help.naver.com/service/30026/contents/20499?osType=COMMONOS",
   },
   {
-    id: "src-food-poisoning",
-    title: "식품안전나라 - 음식점 식중독 예방",
+    id: "src-review-stats",
+    title: "네이버 스마트플레이스 사업주 고객센터 - 리뷰 통계 안내",
     note:
-      "위생모, 위생복, 전처리·조리·세척 앞치마 구분, 장신구 금지, 조리실 전용 작업화 등 종업원·주방 위생 항목의 근거입니다.",
-    url: "https://www.foodsafetykorea.go.kr/portalmobile/content/detail.do?bbs_no=bbs427&ntctxt_no=1069310",
+      "주제별 리뷰 수, 내용 분석, 성별·연령 비율을 확인할 수 있다는 점을 바탕으로 재방문·리뷰 관리 항목을 설계했습니다.",
+    url: "https://help.naver.com/service/30026/contents/20530?osType=PC",
   },
   {
-    id: "src-grade",
-    title: "식품안전나라 - 음식점 위생등급제 지정절차",
+    id: "src-order-build",
+    title: "네이버 예약주문 사업자 고객센터 - 예약/주문 제작 방법",
     note:
-      "위생등급제 신청 대상, 수수료 없음, 기본·일반·공통분야 평가구조를 기준으로 개선 항목을 추가했습니다.",
-    url: "https://www.foodsafetykorea.go.kr/portal/board/boardDetail.do?bbs_no=newbbs12&menu_grp=MENU_NEW02&menu_no=3397",
+      "네이버 주문에서 메뉴, 옵션, 상품 구성과 운영 설정을 관리할 수 있다는 점을 근거로 포장·매장 주문 전환 항목을 만들었습니다.",
+    url: "https://help.naver.com/service/11712/contents/12706?lang=ko",
   },
   {
-    id: "src-labor",
-    title: "고용노동부 - 근로계약서 작성방법",
+    id: "src-order-menu",
+    title: "네이버 예약주문 사업자 고객센터 - 예약·주문자 메뉴 안내",
     note:
-      "임금, 근로시간, 휴일, 연차, 유급휴가 명시와 미교부 시 제재 내용을 기준으로 노무 체크리스트를 정리했습니다.",
-    url: "https://www.moel.go.kr/mainpop2.do",
+      "예약자·주문자 조회와 관리 기능을 활용할 수 있다는 점을 바탕으로 단골 고객 관리 항목을 구성했습니다.",
+    url: "https://help.naver.com/service/11712/contents/18646?lang=ko",
   },
   {
-    id: "src-cash-receipt",
-    title: "국세청 - 현금영수증 발급·수취시 혜택",
+    id: "src-customer-menu",
+    title: "네이버 예약주문 사업자 고객센터 - 고객 메뉴 안내",
     note:
-      "현금영수증 발행 시 세액공제와 누락 방지 관점에서 일일 정산 항목을 설계했습니다.",
-    url: "https://j.nts.go.kr/nts/cm/cntnts/cntntsView.do?cntntsId=7794&mi=2469",
+      "고객 이력 관리와 블랙리스트 등 고객 관리 메뉴를 참고해 재방문 고객 분류와 응대 기준 항목을 정리했습니다.",
+    url: "https://help.naver.com/service/11712/contents/7825?lang=ko",
   },
   {
-    id: "src-business-card",
-    title: "국세청 - 사업용 신용카드 개요",
+    id: "src-order-user",
+    title: "네이버 예약주문 이용자 고객센터 - 이용자의 주문하는 방법(포장/매장)",
     note:
-      "사업용 카드 등록, 매입내역 조회, 매입세액 공제 확인 흐름을 세무·증빙 항목에 반영했습니다.",
-    url: "https://j.nts.go.kr/nts/cm/cntnts/cntntsView.do?cntntsId=7799&mi=2475",
-  },
-  {
-    id: "src-vat",
-    title: "국세청 - 부가가치세 안내",
-    note:
-      "일반과세자·간이과세자 신고주기, 신고기한을 월간·반기 점검 항목으로 반영했습니다.",
-    url: "https://in.nts.go.kr/nts/cm/cntnts/cntntsView.do?cntntsId=7804&mi=2483",
-  },
-  {
-    id: "src-origin",
-    title: "국립농산물품질관리원 - 음식점 원산지 표시 안내",
-    note:
-      "모든 메뉴판·게시판 표시, 표시판 크기, 글자 크기 기준을 원산지·표시 항목에 반영했습니다.",
-    url: "https://www.naqs.go.kr/hp/contents/contentsTab.do?menuId=MN30559",
+      "네이버 주문 검색에서 재주문, 메뉴 카테고리, 프로모션 문구가 어떻게 노출되는지 설명한 내용을 바탕으로 메뉴명·대표상품 설계 항목을 재구성했습니다.",
+    url: "https://help.naver.com/service/11713/contents/13970?osType=COMMONOS",
   },
   {
     id: "src-market-delivery",
     title: "소상공인시장진흥공단 상권정보 - 배달지수",
     note:
-      "배달 매출 성장 추세를 참고 정보로 확인할 수 있다는 점을 바탕으로 상권·배달 분석 항목을 구성했습니다.",
+      "지역·업종별 배달 매출 성장 추세를 참고할 수 있다는 점을 근거로 배달 비중 판단과 배달 운영 재점검 항목을 넣었습니다.",
     url: "https://sg.sbiz.or.kr/godo/stat/baemin.sg",
   },
   {
     id: "src-market-sns",
     title: "소상공인시장진흥공단 상권정보 - SNS분석",
     note:
-      "언급량, 감성분석, 이슈어 랭킹을 활용한 리뷰·브랜드 모니터링 항목의 근거입니다.",
+      "언급량, 감성 분석, 이슈어를 통해 실제 고객 반응을 볼 수 있다는 점을 근거로 리뷰·콘텐츠 개선 항목을 만들었습니다.",
     url: "https://sg.sbiz.or.kr/godo/sns/index.sg",
+  },
+  {
+    id: "src-market-upso",
+    title: "소상공인시장진흥공단 상권정보 - 업소현황",
+    note:
+      "행정동별 업종 업소 수와 변화 추이를 볼 수 있다는 점을 바탕으로 경쟁 강도와 입지 재판단 체크 항목을 구성했습니다.",
+    url: "https://sg.sbiz.or.kr/godo/stat/upso.sg",
+  },
+  {
+    id: "src-market-area",
+    title: "소상공인시장진흥공단 상권정보 - 지역현황",
+    note:
+      "인구 수, 세대 수, 업소 수 등 지역 지표를 볼 수 있다는 점을 근거로 핵심 고객층·영업시간 점검 항목을 만들었습니다.",
+    url: "https://sg.sbiz.or.kr/godo/stat/area.sg",
+  },
+  {
+    id: "src-kostat-delivery",
+    title: "통계청 - 외식가격과 배달가격 관련 설명자료",
+    note:
+      "매장가격과 배달가격을 분리해 볼 필요가 있다는 점을 참고해 채널별 가격·마진 관리 항목을 구성했습니다.",
+    url: "https://www.kostat.go.kr/board.es?act=view&bid=11536&keyField=T&keyWord=&list_no=431247&mid=a10304010000&nPage=1&ref_bid=11534%2C11535%2C11536%2C11537%2C11538%2C11539%2C11545%2C11540%2C11541%2C11542%2C11543%2C11544%2C11546&tag=",
   },
   {
     id: "src-sns-package",
     title: "기업마당 - SNS 활용패키지",
     note:
-      "SNS 타겟 광고, 분석 보고서 지원을 근거로 마케팅 카테고리에 광고 성과 추적 항목을 포함했습니다.",
+      "소상공인의 SNS 타깃 광고와 분석 보고서 지원 내용을 참고해 광고 성과 측정과 채널 운영 점검 항목을 넣었습니다.",
     url: "https://www.bizinfo.go.kr/see/seeh/selectSmesPblancView.do?pblancId=PBLN_000000000104190",
   },
   {
     id: "src-brand-package",
     title: "기업마당 - 브랜드 역량 강화",
     note:
-      "AI 콘텐츠, 데이터 마케팅, 온라인 판로 진출 지원을 바탕으로 브랜드 자산 정비 항목을 넣었습니다.",
+      "브랜드 자산 정비, AI 콘텐츠, 데이터 마케팅 지원 내용을 참고해 브랜딩·콘텐츠 기본기 항목을 구성했습니다.",
     url: "https://www.bizinfo.go.kr/see/seeh/selectSmesPblancView.do?pblancId=PBLN_000000000104213",
-  },
-  {
-    id: "src-biz-registration",
-    title: "찾기쉬운 생활법령정보 - 사업자등록 신청",
-    note:
-      "사업 개시일부터 20일 이내 사업자등록 신청, 임차 시 확정일자 점검 기준을 오픈 준비 항목에 반영했습니다.",
-    url: "https://m.easylaw.go.kr/MOB/CsmInfoRetrieve.laf?ccfNo=6&cciNo=1&cnpClsNo=2&csmSeq=839",
   },
 ];
 
 const checklistData = [
   {
-    id: "opening",
-    eyebrow: "Open Setup",
-    title: "오픈 준비",
+    id: "traffic",
+    eyebrow: "Traffic",
+    title: "신규 유입 만들기",
     description:
-      "영업 개시 전 신고, 등록, 점포 적합성, 서류 준비처럼 시작 단계에서 빠뜨리면 바로 문제가 되는 항목들입니다.",
+      "우리 가게를 아직 모르는 사람을 더 많이 데려오는 영역입니다. 상권 데이터, 검색 유입, 채널 노출을 같이 봐야 합니다.",
     groups: [
       {
-        title: "신고와 등록",
-        description: "개업 전 행정 절차와 기본 문서를 먼저 점검합니다.",
+        title: "상권 재점검",
+        description: "감이 아니라 동네 데이터로 유입 전략을 다시 봅니다.",
         items: [
           {
-            title: "업장 형태에 맞는 영업신고 유형을 확정했다",
+            title: "내 상권의 배달 수요와 경쟁 강도를 월 1회 다시 본다",
             details: [
-              "일반음식점, 휴게음식점, 제과점 중 내 업장에 맞는 유형을 구분한다.",
-              "주류 취급 여부와 조리 범위를 기준으로 업종 구분을 다시 확인한다.",
-              "관할 시·군·구 식품영업 부서 문의처를 확보한다.",
+              "배달지수로 업종 성장 흐름이 살아 있는지 먼저 확인한다.",
+              "업소현황으로 같은 카테고리 점포 수가 빠르게 늘고 있는지 본다.",
+              "경쟁이 과열된 동네라면 신메뉴보다 차별 포지션을 먼저 정한다.",
             ],
-            refs: ["src-opening-report"],
+            refs: ["src-market-delivery", "src-market-upso"],
           },
           {
-            title: "사업자등록과 세무 기본 설정 일정을 잡았다",
+            title: "우리 가게 핵심 고객층을 연령·시간대 기준으로 정의했다",
             details: [
-              "사업 개시일 전 또는 개시일부터 20일 이내 사업자등록 일정을 잡는다.",
-              "일반과세자·간이과세자 중 어떤 유형이 적합한지 검토한다.",
-              "홈택스, 손택스, 사업용 계좌·카드 준비를 동시에 진행한다.",
+              "지역현황과 플레이스 통계의 연령·시간대 데이터를 같이 본다.",
+              "점심 직장인형, 저녁 가족형, 야식 배달형 중 무엇이 중심인지 정한다.",
+              "핵심 고객층이 바뀌면 운영시간·대표사진·대표메뉴도 같이 바꾼다.",
             ],
-            refs: ["src-biz-registration", "src-vat", "src-business-card"],
-          },
-          {
-            title: "임차 점포라면 확정일자·보증금 보호 구조를 확인했다",
-            details: [
-              "임대차계약서와 사업자등록을 연결해 확정일자까지 같이 챙긴다.",
-              "보증금 보호를 위해 계약서 원본과 사본 보관 체계를 만든다.",
-            ],
-            refs: ["src-biz-registration"],
+            refs: ["src-market-area", "src-place-stats"],
           },
         ],
       },
       {
-        title: "오픈 전 적합성",
-        description: "운영 가능 입지와 업장 조건이 실제 영업에 맞는지 확인합니다.",
+        title: "검색 노출 기본기",
+        description: "검색에서 클릭되기 전 단계의 기본기를 정리합니다.",
         items: [
           {
-            title: "해당 점포에서 음식점 영업이 가능한지 확인했다",
+            title: "플레이스 유입 키워드를 보고 소개문구와 메뉴명을 손봤다",
             details: [
-              "용도지역·건축물 용도상 음식점 영업이 가능한지 확인한다.",
-              "옥외영업, 테라스, 배달전문, 공유주방 여부가 추가로 제한되는지 본다.",
+              "사람들이 실제로 들어오는 검색어와 내가 강조하는 문구가 맞는지 본다.",
+              "검색어가 지역+메뉴 중심이면 소개문구도 그 구조로 맞춘다.",
+              "애매한 메뉴명보다 고객이 검색하는 표현으로 바꾼다.",
             ],
-            refs: ["src-opening-report"],
+            refs: ["src-place-stats"],
           },
           {
-            title: "오픈 직전 제출·비치 서류 목록을 따로 정리했다",
+            title: "대표 사진과 첫 화면이 '무엇을 파는 곳인지' 3초 안에 보이게 했다",
             details: [
-              "영업신고 관련 서류, 임대차 관련 서류, 교육·건강진단 증빙을 한 폴더에 모은다.",
-              "점검 대응용 출력본과 디지털 백업본을 분리해 둔다.",
+              "가게 사진보다 대표 메뉴 사진이 먼저 경쟁력이 있는지 점검한다.",
+              "첫 5장의 사진이 메뉴, 분위기, 가격대, 좌석감, 포장 가능 여부를 설명하도록 구성한다.",
+              "채널마다 사진 톤과 순서가 달라 브랜드 인식이 흔들리지 않게 맞춘다.",
             ],
-            refs: ["src-opening-report", "src-health", "src-hygiene-edu"],
+            refs: ["src-brand-package", "src-place-stats"],
+          },
+          {
+            title: "외부 채널보다 먼저 플레이스 기본정보 최신화를 습관화했다",
+            details: [
+              "영업시간, 브레이크타임, 휴무, 주차, 포장 가능 여부를 우선 최신화한다.",
+              "정보 변경 뒤 인스타그램과 배달앱을 같은 날 맞춰 수정한다.",
+              "전화 문의가 자주 들어오는 항목은 소개문구와 사진 캡션에 선반영한다.",
+            ],
+            refs: ["src-place-report", "src-brand-package"],
           },
         ],
       },
     ],
   },
   {
-    id: "hygiene",
-    eyebrow: "Hygiene",
-    title: "위생·식품안전",
+    id: "conversion",
+    eyebrow: "Conversion",
+    title: "플레이스·주문 전환 올리기",
     description:
-      "식중독 예방과 행정점검 대응을 동시에 고려해야 하는 핵심 영역입니다. 교육, 건강진단, 종업원 위생수칙, 주방 운영 루틴을 한 번에 관리합니다.",
+      "유입이 있어도 클릭만 하고 지나가면 매출이 안 납니다. 메뉴 정보, 주문 구조, 첫 인상이 실제 주문으로 이어지게 만드는 구간입니다.",
     groups: [
       {
-        title: "교육과 건강진단",
-        description: "영업자와 종사자의 필수 요건을 먼저 확인합니다.",
+        title: "플레이스 전환",
+        description: "가게 정보를 보는 사람이 실제 행동하게 만드는 체크입니다.",
         items: [
           {
-            title: "영업 전 건강진단과 정기 갱신 일정을 관리한다",
+            title: "플레이스에서 사람들이 가장 많이 보는 시간대에 맞춰 정보와 콘텐츠를 올린다",
             details: [
-              "직접 조리·저장·운반·판매에 종사하는 영업자와 종업원의 건강진단 여부를 확인한다.",
-              "영업 시작 전에 미리 검진을 받고, 연 1회 갱신일을 캘린더에 등록한다.",
-              "미수검자나 위해 우려 질병자가 현장 업무에 투입되지 않도록 체크한다.",
+              "시간별 조회 수가 높은 시간대에 공지, 사진, 소식 발행을 맞춘다.",
+              "점심형 업장은 오전, 저녁형 업장은 오후에 당일 메시지를 노출한다.",
+              "조회가 높은데 방문 전환이 약하면 첫 화면 문구를 다시 테스트한다.",
             ],
-            refs: ["src-health"],
+            refs: ["src-place-stats", "src-place-report"],
           },
           {
-            title: "신규 식품위생교육과 매년 보수교육을 빠뜨리지 않는다",
+            title: "주문 전 망설이게 하는 정보 공백을 없앴다",
             details: [
-              "식품접객업 신규 영업자는 6시간 교육 이수 여부를 확인한다.",
-              "매년 정기 위생교육 대상과 일정, 이수증 보관 상태를 관리한다.",
-              "여러 업장을 운영하면 위생관리 책임자 지정 가능 여부를 검토한다.",
+              "가격, 1인 주문 가능 여부, 포장 대기시간, 주차, 좌석 정보를 명확히 넣는다.",
+              "대표 메뉴는 사진, 양, 매운맛, 추천 조합까지 같이 적는다.",
+              "고객이 전화로 묻는 질문이 많을수록 페이지 설명이 부족한 신호로 본다.",
             ],
-            refs: ["src-hygiene-edu"],
+            refs: ["src-order-build", "src-place-stats"],
           },
         ],
       },
       {
-        title: "종업원 개인위생",
-        description: "현장에서 바로 실천할 수 있는 루틴으로 관리합니다.",
+        title: "주문 구조 설계",
+        description: "메뉴를 잘 파는 순서와 선택 구조를 만듭니다.",
         items: [
           {
-            title: "조리 종사자 복장·장신구·작업화 규칙을 운영표준으로 만들었다",
+            title: "대표 메뉴 3개를 정하고 그 메뉴에 주문이 몰리게 설계했다",
             details: [
-              "위생모 착용, 위생복 청결, 전처리·조리·세척 앞치마 구분 사용을 지킨다.",
-              "시계, 반지, 귀걸이 등 장신구 금지와 손톱 위생 기준을 명확히 한다.",
-              "조리실 전용 작업화와 외부 출입 후 소독 절차를 운영한다.",
+              "선택이 너무 많아지면 전환이 떨어지므로 대표 메뉴를 앞에 둔다.",
+              "주문 화면 첫 구간에는 입문 메뉴, 가장 잘 팔리는 메뉴, 이익률 좋은 메뉴를 배치한다.",
+              "메뉴명이 생소하면 고객이 아는 설명형 이름을 병기한다.",
             ],
-            refs: ["src-food-poisoning"],
+            refs: ["src-order-build", "src-order-user"],
           },
           {
-            title: "화장실 사용 후 복귀 절차와 손 위생 루틴을 점검한다",
+            title: "옵션과 추가 선택지가 복잡해서 주문 이탈이 나지 않게 정리했다",
             details: [
-              "화장실 전용 신발과 복귀 후 손 소독 절차를 구체적으로 정한다.",
-              "오픈 전·피크타임 전·휴게 후 손 씻기 체크를 팀 규칙으로 만든다.",
+              "필수 옵션은 최소화하고, 자주 선택하는 옵션만 남긴다.",
+              "사이드 추가는 1~2단계 안에서 끝나도록 만든다.",
+              "직원이 설명해주지 않아도 주문이 가능한 구조인지 직접 고객처럼 테스트한다.",
             ],
-            refs: ["src-food-poisoning"],
-          },
-        ],
-      },
-      {
-        title: "주방·위생 관리 수준",
-        description: "행정점검 대비와 실제 안전 운영을 함께 봅니다.",
-        items: [
-          {
-            title: "위생점검표를 일일·주간 단위로 운영한다",
-            details: [
-              "냉장·냉동 상태, 세척·소독, 식재료 보관, 폐기 기준을 내부 점검표로 만든다.",
-              "오픈 전, 마감 전 2회 확인 루틴을 만든다.",
-            ],
-            refs: ["src-food-poisoning", "src-grade"],
+            refs: ["src-order-build", "src-order-user"],
           },
           {
-            title: "위생등급제 도전 여부를 검토하고 기준에 맞춰 개선한다",
+            title: "포장·매장·배달 채널별로 같은 메뉴라도 표현과 구성을 다르게 봤다",
             details: [
-              "일반음식점·휴게음식점·제과점이면 신청 가능 여부를 확인한다.",
-              "기본분야는 전부 적합해야 하고, 총점 85점 이상이 필요하다는 점을 감안해 준비한다.",
-              "고객 신뢰와 지원사업 연계 가능성도 함께 검토한다.",
+              "포장은 이동 편의, 매장은 경험, 배달은 도착 후 만족도 기준으로 메뉴 구성을 나눈다.",
+              "배달에서 불리한 메뉴는 과감히 주력에서 빼거나 조리법을 수정한다.",
+              "채널별 판매 순위가 다르면 대표 메뉴 노출 순서도 다르게 운영한다.",
             ],
-            refs: ["src-grade"],
-          },
-          {
-            title: "메뉴별 원산지 표시 체계를 점검했다",
-            details: [
-              "모든 메뉴판과 게시판에 원산지를 표시하거나 별도 표시판을 소비자 눈에 띄게 둔다.",
-              "음식명과 같은 크기 이상으로 표시되도록 점검한다.",
-              "메뉴 변경 시 원산지 문구도 함께 업데이트한다.",
-            ],
-            refs: ["src-origin"],
+            refs: ["src-order-user", "src-kostat-delivery"],
           },
         ],
       },
     ],
   },
   {
-    id: "labor",
-    eyebrow: "People",
-    title: "인사·노무",
+    id: "ticket",
+    eyebrow: "Average Ticket",
+    title: "객단가 올리기",
     description:
-      "소규모 외식업에서 가장 자주 흔들리는 영역입니다. 채용 시점부터 스케줄, 급여, 휴게 관리까지 문서화가 중요합니다.",
+      "손님 수를 당장 크게 늘리기 어렵다면 객단가를 올리는 게 더 빠를 때가 많습니다. 추가 구성과 가격 설계를 같이 다룹니다.",
     groups: [
       {
-        title: "채용과 계약",
-        description: "구두 합의를 줄이고 기본 문서를 갖춥니다.",
+        title: "메뉴 구성",
+        description: "고객이 자연스럽게 한 단계 더 담게 만듭니다.",
         items: [
           {
-            title: "모든 직원과 서면 근로계약서를 작성·교부했다",
+            title: "대표 메뉴 옆에 가장 잘 붙는 사이드·음료를 세트처럼 제안한다",
             details: [
-              "입사일, 업무 내용, 근무 장소를 계약서에 적는다.",
-              "임금, 근로시간, 휴일, 연차, 유급휴가를 명시한다.",
-              "아르바이트·단시간 근로자도 같은 원칙으로 교부한다.",
+              "추가 주문이 많이 붙는 조합을 기준으로 세트 문구를 만든다.",
+              "묶음 할인보다 선택 피로를 줄이는 제안 문구가 더 잘 먹히는지 비교한다.",
+              "고객이 많이 묻는 조합은 기본 추천으로 끌어올린다.",
             ],
-            refs: ["src-labor"],
+            refs: ["src-order-build", "src-order-user"],
           },
           {
-            title: "업무별 교육 범위와 책임선을 정리했다",
+            title: "이익률이 좋은 메뉴가 눈에 띄는 위치에 배치되어 있다",
             details: [
-              "홀, 주방, 배달 포장, 발주, 마감 책임자를 분리한다.",
-              "신입 교육 체크리스트와 인수인계 기준을 문서로 남긴다.",
+              "판매량은 많은데 남는 게 적은 메뉴와, 판매량은 적지만 마진이 좋은 메뉴를 구분한다.",
+              "메뉴판 중앙 또는 첫 화면 상단에 밀고 싶은 메뉴를 둔다.",
+              "사진, 이름, 설명 길이까지 포함해 어떤 메뉴를 팔고 싶은지 드러나게 만든다.",
             ],
-            refs: ["src-labor", "src-food-poisoning"],
+            refs: ["src-brand-package", "src-order-user"],
           },
         ],
       },
       {
-        title: "근로시간과 급여 운영",
-        description: "분쟁을 줄이기 위해 기록과 기준을 남깁니다.",
+        title: "가격 전략",
+        description: "가격을 단순 인상하는 대신 납득 가능한 구조를 만듭니다.",
         items: [
           {
-            title: "근무표와 휴게시간 기준을 미리 공개한다",
+            title: "채널별 가격과 수수료를 따로 보고 실제 남는 금액 기준으로 본다",
             details: [
-              "피크타임, 브레이크타임, 마감조 기준을 주간 단위로 공유한다.",
-              "4시간 근무 시 30분, 8시간 근무 시 1시간 이상 휴게 기준이 반영되도록 스케줄을 짠다.",
+              "매장, 포장, 배달의 최종 마진이 각각 얼마인지 표로 정리한다.",
+              "배달 가격은 포장·매장과 같게 둘지, 채널별 구조를 둘지 숫자로 판단한다.",
+              "수수료와 배달비를 반영해도 남지 않는 메뉴는 구조를 바꾼다.",
             ],
-            refs: ["src-labor"],
+            refs: ["src-kostat-delivery", "src-market-delivery"],
           },
           {
-            title: "급여 산정에 필요한 출퇴근·연장근로 기록을 남긴다",
+            title: "가격 인상 전후에 고객 반응을 볼 메뉴와 지표를 정해둔다",
             details: [
-              "출퇴근 기록 방식과 마감 연장 시간 산정 기준을 정한다.",
-              "최저임금, 주휴, 초과근무 정산 누락이 없도록 점검한다.",
+              "전체 메뉴를 올리기보다 원가 압박이 큰 품목부터 우선 테스트한다.",
+              "가격을 올릴 때는 구성, 양, 설명 문구, 사진 보완까지 같이 움직인다.",
+              "판매량 하락보다 객단가 상승이 더 크면 유지하고, 아니면 빠르게 수정한다.",
             ],
-            refs: ["src-labor"],
+            refs: ["src-kostat-delivery", "src-place-report"],
           },
         ],
       },
     ],
   },
   {
-    id: "tax",
-    eyebrow: "Tax & Admin",
-    title: "세무·정산",
+    id: "repeat",
+    eyebrow: "Repeat",
+    title: "재방문·리뷰 관리",
     description:
-      "매출 누락과 증빙 누락은 바로 비용으로 이어집니다. 카드, 현금영수증, 부가세, 증빙 보관 체계를 일상 루틴으로 만들어야 합니다.",
+      "외식업은 첫 방문보다 두 번째 방문이 중요합니다. 리뷰를 단순 평판 관리가 아니라 재구매 데이터로 봐야 합니다.",
     groups: [
       {
-        title: "매출 정산",
-        description: "현장 정산과 세무 연결을 일치시킵니다.",
+        title: "리뷰 운영",
+        description: "리뷰 수 자체보다 어떤 내용이 반복되는지를 봅니다.",
         items: [
           {
-            title: "현금·카드·배달앱 매출을 일일 마감 기준으로 맞춘다",
+            title: "리뷰를 주제별로 묶어 우리 가게의 강점과 약점을 파악한다",
             details: [
-              "포스, 카드 매출, 배달앱 정산 예정액을 매일 대조한다.",
-              "취소·환불·서비스 제공 내역이 실제 정산표와 일치하는지 확인한다.",
+              "맛, 양, 친절, 대기, 분위기, 배달 상태 중 어떤 키워드가 반복되는지 본다.",
+              "칭찬이 몰리는 포인트는 첫 화면 문구와 대표사진에 반영한다.",
+              "불만 키워드는 사과 답글보다 운영 수정이 먼저 필요한 항목으로 분류한다.",
             ],
-            refs: ["src-cash-receipt", "src-vat"],
+            refs: ["src-review-stats", "src-market-sns"],
           },
           {
-            title: "현금영수증 발급 누락을 줄이는 운영 규칙을 만들었다",
+            title: "리뷰 요청을 어색하지 않은 운영 흐름으로 만들었다",
             details: [
-              "현금 결제 시 발급 요청 여부를 묻는 기본 응대 문구를 둔다.",
-              "현금영수증 발급 내역을 정기 확인해 누락 패턴을 찾는다.",
-              "세액공제 대상 여부와 혜택도 함께 관리한다.",
+              "결제 직후, 포장 수령 직후, 만족도가 높을 순간에 자연스럽게 안내한다.",
+              "어뷰징으로 보일 수 있는 과한 보상보다 경험이 좋을 때 리뷰가 나오게 설계한다.",
+              "정상 방문 인증 리뷰가 쌓이는 구조를 만들고 비정상 방법은 피한다.",
             ],
-            refs: ["src-cash-receipt"],
+            refs: ["src-review-rules", "src-order-menu"],
+          },
+          {
+            title: "리뷰 답글은 감정 대응이 아니라 다음 손님을 위한 설명으로 작성한다",
+            details: [
+              "칭찬 리뷰에는 강점을 강화하는 메시지를 남긴다.",
+              "불만 리뷰에는 사실 확인, 사과, 수정사항을 짧고 분명하게 적는다.",
+              "같은 불만이 3번 이상 반복되면 답글이 아니라 운영 방식부터 바꾼다.",
+            ],
+            refs: ["src-review-rules", "src-market-sns"],
           },
         ],
       },
       {
-        title: "비용과 증빙",
-        description: "매입 증빙을 빠짐없이 남겨야 실제 비용 처리가 가능합니다.",
+        title: "단골 관리",
+        description: "재방문을 만드는 사람을 따로 보고 관리합니다.",
         items: [
           {
-            title: "사업용 신용카드를 등록하고 사용내역을 확인한다",
+            title: "재주문 고객이 많은 메뉴와 첫 주문 메뉴를 구분해 본다",
             details: [
-              "대표자 본인 명의 카드를 홈택스 또는 손택스에 등록한다.",
-              "월별 사용내역과 매입세액 공제 대상 여부를 확인한다.",
-              "개인 사용과 사업 사용을 섞지 않도록 결제 원칙을 나눈다.",
+              "처음 끌어오는 메뉴와 다시 오게 하는 메뉴가 같은지 확인한다.",
+              "첫 주문 메뉴가 강하지만 재주문이 약하면 만족도 개선 포인트를 찾는다.",
+              "재주문이 강한 메뉴는 대표 메뉴와 세트 제안에 더 많이 노출한다.",
             ],
-            refs: ["src-business-card"],
+            refs: ["src-order-user", "src-order-menu"],
           },
           {
-            title: "세금계산서·카드전표·현금영수증 수취 체계를 통일했다",
+            title: "단골 고객 응대 기준을 만들어 일관된 경험을 준다",
             details: [
-              "식재료, 소모품, 장비 수리, 광고비 등 비용별 증빙 형태를 정한다.",
-              "누락되기 쉬운 소액 구매도 사업용 결제수단으로 일원화한다.",
+              "자주 오는 고객에게 어떤 정보를 기억하고 어떤 서비스를 표준화할지 정한다.",
+              "응대 품질이 사람마다 달라지지 않게 간단한 기준 문장을 만든다.",
+              "문제 고객은 별도 관리하고, 좋은 고객은 알아보는 구조를 만든다.",
             ],
-            refs: ["src-business-card", "src-vat"],
-          },
-        ],
-      },
-      {
-        title: "신고 일정",
-        description: "월간 점검과 반기·연간 일정을 함께 관리합니다.",
-        items: [
-          {
-            title: "부가가치세 신고 주기와 마감일을 캘린더에 등록했다",
-            details: [
-              "일반과세자는 매년 1월과 7월, 간이과세자는 매년 1월 신고 구조를 확인한다.",
-              "배달앱 수수료, 카드 수수료, 매입 누락이 없는지 신고 전 점검한다.",
-            ],
-            refs: ["src-vat"],
-          },
-          {
-            title: "월별 손익 리뷰를 단순 매출이 아니라 실제 남는 돈 기준으로 본다",
-            details: [
-              "식재료비, 인건비, 임차료, 플랫폼 수수료, 광고비를 함께 본다.",
-              "고정비와 변동비를 나눠 메뉴 가격 조정 근거로 활용한다.",
-            ],
-            refs: ["src-vat", "src-business-card"],
+            refs: ["src-customer-menu", "src-order-menu"],
           },
         ],
       },
     ],
   },
   {
-    id: "store",
-    eyebrow: "Store & Safety",
-    title: "매장·시설·안전",
+    id: "delivery",
+    eyebrow: "Delivery",
+    title: "배달·포장 수익성",
     description:
-      "주방 장비, 청소, 안전사고, 고객 동선, 외부 표시물까지 매장 상태는 매출과 점검 결과를 동시에 좌우합니다.",
+      "배달 매출이 늘어도 실제로는 덜 남는 경우가 많습니다. 채널 수익성, 메뉴 적합성, 운영 속도를 따로 봐야 합니다.",
     groups: [
       {
-        title: "시설 점검",
-        description: "고장 전 예방과 마감 점검을 기본으로 둡니다.",
+        title: "채널 수익 계산",
+        description: "매출보다 남는 돈 중심으로 운영합니다.",
         items: [
           {
-            title: "냉장·냉동·조리 장비 점검 루틴을 운영한다",
+            title: "배달 채널별 순수익을 메뉴 단위로 계산해봤다",
             details: [
-              "온도 이상 여부, 성능 저하, 누수, 소음 등을 주기적으로 확인한다.",
-              "이상 발생 시 임시조치와 수리 연락처를 한 문서에 정리한다.",
+              "판매가, 수수료, 포장비, 배달 관련 비용까지 빼고 남는 금액을 본다.",
+              "같은 매출이라도 어떤 채널이 더 남는지 숫자로 정리한다.",
+              "순수익이 낮은 채널은 광고를 줄이거나 메뉴 구성을 바꾼다.",
             ],
-            refs: ["src-food-poisoning", "src-grade"],
+            refs: ["src-kostat-delivery", "src-market-delivery"],
           },
           {
-            title: "주방·홀·창고 청소를 구역별로 나눠 관리한다",
+            title: "포장 채널을 배달 대체 수단으로 적극 운영한다",
             details: [
-              "일일 청소와 주간 대청소 구역을 구분한다.",
-              "후드, 환풍기, 배수구, 제빙기처럼 놓치기 쉬운 항목을 별도 표기한다.",
+              "포장은 수익성이 더 높을 수 있으므로 유도 문구를 따로 만든다.",
+              "포장 고객에게는 대기 시간, 픽업 동선, 보관 상태를 더 신경 쓴다.",
+              "배달 고객 일부가 포장으로 전환될 수 있는지 프로모션 없이도 테스트한다.",
             ],
-            refs: ["src-food-poisoning", "src-grade"],
+            refs: ["src-order-user", "src-order-build"],
           },
         ],
       },
       {
-        title: "고객 안전과 표시",
-        description: "고객이 보는 정보와 동선도 운영 품질입니다.",
+        title: "배달 전용 운영 품질",
+        description: "배달에 맞지 않는 메뉴와 프로세스를 정리합니다.",
         items: [
           {
-            title: "메뉴판·게시판 정보가 실제 운영과 일치한다",
+            title: "배달에서 맛과 비주얼이 무너지는 메뉴를 골라냈다",
             details: [
-              "가격, 원산지, 품절 여부, 세트 구성, 추가금 정보를 최신 상태로 유지한다.",
-              "배달앱과 오프라인 메뉴판 내용이 다르지 않은지 주기적으로 본다.",
+              "10분, 20분, 30분 뒤 상태를 직접 먹어보고 메뉴를 재평가한다.",
+              "눅눅해지는 메뉴, 분리되는 소스, 새는 국물은 포장 구조를 바꾼다.",
+              "개선이 안 되면 대표 메뉴에서 내리거나 배달 전용 버전으로 바꾼다.",
             ],
-            refs: ["src-origin"],
+            refs: ["src-market-delivery", "src-order-user"],
           },
           {
-            title: "매장 내 미끄럼·화상·화재 위험 포인트를 상시 점검한다",
+            title: "피크타임 품절과 배달 지연이 반복되지 않게 기준을 세웠다",
             details: [
-              "바닥 물기, 가스·열기구 주변, 전기 멀티탭 과부하, 비상 동선을 확인한다.",
-              "직원들에게 사고 발생 시 대응 순서를 공유한다.",
+              "자주 품절되는 메뉴는 발주, 전처리량, 판매시간대를 같이 본다.",
+              "지연이 반복되는 시간대는 메뉴 수를 줄이거나 조리 동선을 나눈다.",
+              "주문을 더 받는 것보다 늦지 않게 보내는 편이 재주문에 유리한지 확인한다.",
             ],
-            refs: ["src-food-poisoning"],
+            refs: ["src-order-build", "src-place-report"],
+          },
+          {
+            title: "배달 설명 문구와 프로모션 문구가 실제 장점만 말하게 정리됐다",
+            details: [
+              "할인만 강조하기보다 대표 메뉴, 양, 속도, 포장 강점을 분명히 적는다.",
+              "주문 검색에서 보이는 짧은 문구에 무엇을 넣을지 테스트한다.",
+              "반복되는 칭찬 포인트를 프로모션 문구로 옮긴다.",
+            ],
+            refs: ["src-order-user", "src-market-sns"],
           },
         ],
       },
     ],
   },
   {
-    id: "marketing",
-    eyebrow: "Marketing",
-    title: "마케팅·고객관리",
+    id: "ops",
+    eyebrow: "Ops",
+    title: "피크타임 운영 효율",
     description:
-      "감으로만 운영하지 않고, 상권 데이터와 SNS 반응을 바탕으로 채널별 전략을 세우는 데 초점을 둡니다.",
+      "바쁜 시간에 흔들리면 매출이 새고 리뷰가 나빠집니다. 속도, 동선, 역할 분리가 효율의 핵심입니다.",
     groups: [
       {
-        title: "상권과 채널 분석",
-        description: "출점 이후에도 상권은 계속 다시 봐야 합니다.",
+        title: "현장 동선",
+        description: "사람을 더 뽑기 전에 동선을 먼저 봅니다.",
         items: [
           {
-            title: "배달지수·상권 데이터를 월별로 확인한다",
+            title: "주문이 몰릴 때 가장 막히는 한 지점을 찾았다",
             details: [
-              "배달 매출 성장 추세와 업종 흐름을 참고해 배달 비중을 조정한다.",
-              "매장 방문형인지 배달형인지 지역 특성을 데이터로 다시 본다.",
+              "접수, 조리, 플레이팅, 포장, 전달 중 어디서 대기가 생기는지 본다.",
+              "병목 지점 하나만 풀어도 체감 속도가 크게 달라지는지 확인한다.",
+              "피크타임에는 잘 안 팔리는 복잡한 메뉴를 잠시 뒤로 미루는 것도 검토한다.",
             ],
-            refs: ["src-market-delivery"],
+            refs: ["src-place-report", "src-market-sns"],
           },
           {
-            title: "SNS 언급량과 감성 반응을 정기 모니터링한다",
+            title: "직원별 역할이 겹치지 않도록 피크타임 역할표를 만들었다",
             details: [
-              "브랜드명, 대표 메뉴명, 지역명 키워드를 모니터링한다.",
-              "긍정·부정 언급과 반복 이슈를 확인해 메뉴, 서비스, 콘텐츠에 반영한다.",
+              "누가 접수, 누가 조리, 누가 포장, 누가 응대를 맡는지 고정한다.",
+              "사장 한 명이 모든 예외를 처리하는 구조면 병목이 생기는지 본다.",
+              "신입도 따라할 수 있게 피크타임 우선순위를 문장으로 남긴다.",
             ],
-            refs: ["src-market-sns"],
+            refs: ["src-order-menu", "src-customer-menu"],
           },
         ],
       },
       {
-        title: "콘텐츠와 광고 운영",
-        description: "채널을 만들기만 하지 말고 성과를 추적합니다.",
+        title: "표준화",
+        description: "컨디션이 아닌 시스템으로 품질을 맞춥니다.",
         items: [
           {
-            title: "브랜드 자산을 통일해 노출한다",
+            title: "자주 실수하는 메뉴는 레시피보다 '실수 포인트'를 적어뒀다",
             details: [
-              "대표 사진, 로고, 소개 문구, 메뉴 설명, 가격 정보를 채널별로 통일한다.",
-              "네이버 플레이스, 인스타그램, 배달앱, 지도 서비스 정보가 서로 다르지 않게 관리한다.",
+              "양, 소스, 토핑 누락, 포장 오류처럼 실제 실수 지점을 기록한다.",
+              "잘하는 직원의 감각을 초 단위·숟가락 수 단위로 최대한 언어화한다.",
+              "메뉴별 체크포인트를 만들면 신입 적응 시간이 줄어드는지 본다.",
             ],
-            refs: ["src-brand-package"],
+            refs: ["src-place-report"],
           },
           {
-            title: "광고를 집행했다면 결과 보고 기준을 정해둔다",
+            title: "오픈·마감 루틴이 다음 영업의 속도까지 고려하게 정리됐다",
             details: [
-              "광고 전후 방문수, 저장수, 전화수, 배달 주문수 변화를 기록한다.",
-              "단순 노출보다 실제 주문 전환이나 재방문으로 이어졌는지 본다.",
+              "다음날 피크타임 준비가 쉬워지도록 전처리, 소분, 청소 순서를 짠다.",
+              "마감이 늦어지는 이유가 청소가 아니라 정리 미흡인지 확인한다.",
+              "오픈 직전 허둥대는 작업을 전날로 넘길 수 있는지 본다.",
+            ],
+            refs: ["src-place-report", "src-order-build"],
+          },
+          {
+            title: "대기 시간 안내와 고객 응대 문구를 미리 정해놨다",
+            details: [
+              "늦어질 때마다 직원이 제각각 설명하면 불만이 커지는지 본다.",
+              "대기 예상 시간, 포장 완료 알림, 품절 안내 문구를 통일한다.",
+              "응대가 빨라지면 실제 대기 시간보다 체감 불편이 줄어드는지 확인한다.",
+            ],
+            refs: ["src-customer-menu", "src-order-menu"],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "profit",
+    eyebrow: "Profit",
+    title: "원가·인건비·주간 관리",
+    description:
+      "매출이 올라가도 남는 돈이 줄 수 있습니다. 결국은 원가, 인건비, 광고비, 시간 사용을 같이 관리해야 합니다.",
+    groups: [
+      {
+        title: "원가 관리",
+        description: "잘 팔리는 것과 잘 남는 것을 분리해서 봅니다.",
+        items: [
+          {
+            title: "메뉴별 판매량과 메뉴별 마진을 따로 관리한다",
+            details: [
+              "판매량 상위 메뉴와 이익 상위 메뉴를 구분해서 본다.",
+              "잘 팔리지만 안 남는 메뉴는 가격, 구성, 원재료를 조정한다.",
+              "잘 남지만 안 팔리는 메뉴는 노출과 설명 방식부터 바꿔본다.",
+            ],
+            refs: ["src-place-report", "src-brand-package"],
+          },
+          {
+            title: "폐기와 할인, 서비스 제공이 얼마나 이익을 깎는지 기록한다",
+            details: [
+              "로스의 원인을 발주, 유통기한, 조리 실수, 과다 서비스로 나눠 적는다.",
+              "관성적으로 넣는 서비스가 실제 재방문으로 이어지는지 본다.",
+              "주간 회고 때 가장 비싼 실수 한 가지를 줄이는 데 집중한다.",
+            ],
+            refs: ["src-place-report"],
+          },
+        ],
+      },
+      {
+        title: "주간 의사결정",
+        description: "매주 숫자를 보고 바로 액션으로 연결합니다.",
+        items: [
+          {
+            title: "매주 한 번은 유입, 주문, 리뷰, 원가를 한 화면처럼 같이 본다",
+            details: [
+              "플레이스 통계, 리뷰 통계, 판매 데이터, 원가표를 같은 시간에 점검한다.",
+              "유입은 늘었는데 주문이 약한지, 주문은 늘었는데 리뷰가 나빠졌는지 연결해서 본다.",
+              "숫자를 본 뒤 다음 주 실험 1개만 정하고 끝낸다.",
+            ],
+            refs: ["src-place-stats", "src-review-stats", "src-place-report"],
+          },
+          {
+            title: "광고와 프로모션은 집행보다 회수 여부를 먼저 본다",
+            details: [
+              "광고 전후에 저장, 전화, 주문, 재방문 변화가 있었는지 기록한다.",
+              "광고비가 객단가나 재주문보다 빨리 새는 구조면 바로 줄인다.",
+              "할인 프로모션이 끝난 뒤 매출이 유지되는지까지 봐야 진짜 효과로 판단한다.",
+            ],
+            refs: ["src-sns-package", "src-brand-package", "src-place-stats"],
+          },
+          {
+            title: "지원사업과 도구는 '있는지'보다 '지금 우리 단계에 맞는지'로 고른다",
+            details: [
+              "브랜딩, SNS, 데이터 마케팅 지원이 필요한 시점인지 먼저 판단한다.",
+              "인력 부족 단계라면 화려한 마케팅보다 운영 표준화가 우선인지 점검한다.",
+              "한 번에 다 하지 말고 당장 매출 레버가 큰 한 가지에만 자원을 쓴다.",
             ],
             refs: ["src-sns-package", "src-brand-package"],
-          },
-        ],
-      },
-      {
-        title: "리뷰와 고객 경험",
-        description: "고객의 언어를 운영 개선 데이터로 바꿉니다.",
-        items: [
-          {
-            title: "리뷰 응대 기준을 만들어 감정 대응을 줄인다",
-            details: [
-              "불만 리뷰는 사실 확인, 사과, 개선조치, 재발방지 순서로 대응한다.",
-              "반복되는 칭찬 포인트는 대표 강점으로 콘텐츠화한다.",
-            ],
-            refs: ["src-market-sns"],
-          },
-          {
-            title: "고객이 자주 묻는 정보를 미리 공개한다",
-            details: [
-              "영업시간, 브레이크타임, 주차, 포장 가능 여부, 라스트오더를 명확히 표기한다.",
-              "혼잡 시간과 대기 방식도 안내해 고객 기대치를 맞춘다.",
-            ],
-            refs: ["src-brand-package", "src-market-sns"],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "management",
-    eyebrow: "Management",
-    title: "경영관리",
-    description:
-      "운영이 바빠질수록 숫자와 반복 업무를 정리하는 구조가 필요합니다. 월간 점검과 개선 루프를 만드는 카테고리입니다.",
-    groups: [
-      {
-        title: "매출·원가 관리",
-        description: "매출 규모보다 구조를 보는 습관을 만듭니다.",
-        items: [
-          {
-            title: "메뉴별 매출과 원가를 따로 본다",
-            details: [
-              "잘 팔리는 메뉴와 실제 이익이 남는 메뉴가 같은지 구분한다.",
-              "원가 상승 품목은 가격 조정, 구성 변경, 대체 식재료 검토를 한다.",
-            ],
-            refs: ["src-vat", "src-business-card"],
-          },
-          {
-            title: "폐기·로스 원인을 기록한다",
-            details: [
-              "발주 과다, 조리 실수, 유통기한 경과, 판매 부진 등 원인을 나눠 적는다.",
-              "주간 회고 때 가장 큰 로스 요인을 줄이는 액션을 정한다.",
-            ],
-            refs: ["src-food-poisoning"],
-          },
-        ],
-      },
-      {
-        title: "운영 루틴",
-        description: "사장 혼자 기억하는 구조에서 벗어납니다.",
-        items: [
-          {
-            title: "오픈·마감 체크리스트를 직원과 공유한다",
-            details: [
-              "현금·포스·위생·장비·청소·재고 점검을 순서대로 고정한다.",
-              "누가 확인했는지 기록이 남는 방식으로 운영한다.",
-            ],
-            refs: ["src-food-poisoning", "src-cash-receipt"],
-          },
-          {
-            title: "지원사업과 제도 활용 여부를 분기마다 점검한다",
-            details: [
-              "위생 개선, 온라인 판로, 브랜드 강화, SNS 마케팅 관련 지원사업 공고를 확인한다.",
-              "지원요건과 제출자료를 평소에 준비해 기회를 놓치지 않는다.",
-            ],
-            refs: ["src-sns-package", "src-brand-package", "src-grade"],
           },
         ],
       },
@@ -704,7 +694,7 @@ function render() {
           refLink.href = source.url;
           refLink.target = "_blank";
           refLink.rel = "noreferrer";
-          refLink.textContent = source.title.replace(/^[^-]+ - /, "");
+          refLink.textContent = source.title.replace(/^[^-]+ - /u, "");
           refs.appendChild(refLink);
         });
 
@@ -786,14 +776,17 @@ function updateSummary() {
   const checkedCount = flatItems.filter((item) =>
     item.querySelector('input[type="checkbox"]').checked
   ).length;
-  const percent = flatItems.length === 0 ? 0 : Math.round((checkedCount / flatItems.length) * 100);
+  const percent =
+    flatItems.length === 0 ? 0 : Math.round((checkedCount / flatItems.length) * 100);
   progressPercent.textContent = `${percent}%`;
 
   checklistData.forEach((category) => {
     const categoryCheckedCount = flatItems.filter((item) => {
       const itemId = item.dataset.itemId || "";
-      return itemId.startsWith(`${category.id}-`) &&
-        item.querySelector('input[type="checkbox"]').checked;
+      return (
+        itemId.startsWith(`${category.id}-`) &&
+        item.querySelector('input[type="checkbox"]').checked
+      );
     }).length;
     updateCategoryProgress(category.id, categoryCheckedCount);
   });
