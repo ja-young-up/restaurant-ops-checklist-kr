@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>외식업 운영 체크리스트</title>
+    <meta
+      name="description"
+      content="국내 공공·기관 자료를 바탕으로 정리한 요식업 자영업자 운영 체크리스트"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=SUIT:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero__badge">2026 한국 기준 요약</div>
+        <div class="hero__content">
+          <div>
+            <p class="eyebrow">Restaurant Operations Checklist</p>
+            <h1>외식업 자영업자가 놓치기 쉬운 운영 체크리스트</h1>
+            <p class="hero__lead">
+              식약처, 식품안전나라, 고용노동부, 국세청, 소상공인시장진흥공단,
+              국립농산물품질관리원 등 국내 발행 자료를 바탕으로 정리한
+              실무형 체크리스트입니다.
+            </p>
+          </div>
+          <div class="hero__panel">
+            <div class="metric">
+              <span class="metric__label">대분류</span>
+              <strong id="categoryCount">0</strong>
+            </div>
+            <div class="metric">
+              <span class="metric__label">체크 항목</span>
+              <strong id="itemCount">0</strong>
+            </div>
+            <div class="metric">
+              <span class="metric__label">진행률</span>
+              <strong id="progressPercent">0%</strong>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <aside class="sidebar">
+          <section class="panel controls">
+            <h2>빠르게 보기</h2>
+            <label class="search-field">
+              <span>검색</span>
+              <input
+                id="searchInput"
+                type="search"
+                placeholder="예: 위생교육, 근로계약서, 원산지"
+              />
+            </label>
+            <div class="toggle-row">
+              <label class="switch">
+                <input id="onlyUnchecked" type="checkbox" />
+                <span>미완료만 보기</span>
+              </label>
+            </div>
+            <div class="actions">
+              <button id="expandAllBtn" type="button">전체 펼치기</button>
+              <button id="collapseAllBtn" type="button">전체 접기</button>
+              <button id="resetBtn" type="button" class="ghost">
+                체크 초기화
+              </button>
+            </div>
+          </section>
+
+          <nav class="panel quick-nav" aria-label="카테고리 이동">
+            <h2>카테고리</h2>
+            <div id="categoryNav" class="quick-nav__list"></div>
+          </nav>
+        </aside>
+
+        <section class="content">
+          <section class="panel intro">
+            <div>
+              <h2>이 페이지 구성 방식</h2>
+              <p>
+                체크리스트는 실제 운영 흐름에 맞춰 오픈 준비부터 위생, 노무,
+                세무, 마케팅, 경영관리까지 순서대로 정리했습니다. 항목마다
+                실무에서 바로 점검할 수 있게 하위 체크리스트를 붙였고, 하단에는
+                근거 자료를 따로 모았습니다.
+              </p>
+            </div>
+            <div class="intro__note">
+              <strong>주의</strong>
+              <p>
+                지역별 조례·구청 행정 해석·업장 형태에 따라 추가 요건이 있을 수
+                있으므로 실제 신고·점검 전에는 관할 지자체와 최신 공고를 함께
+                확인하세요.
+              </p>
+            </div>
+          </section>
+
+          <section class="panel section-progress">
+            <div class="section-heading">
+              <p class="eyebrow">Progress Board</p>
+              <h2>섹션별 진행 현황</h2>
+            </div>
+            <div id="sectionProgressBoard" class="section-progress__grid"></div>
+          </section>
+
+          <div id="checklistContainer" class="checklist"></div>
+
+          <section class="panel sources" id="sources">
+            <div class="section-heading">
+              <p class="eyebrow">Sources</p>
+              <h2>국내 자료 출처</h2>
+            </div>
+            <div id="sourcesContainer" class="sources__grid"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <template id="categoryTemplate">
+      <article class="category-card">
+        <button class="category-card__header" type="button">
+          <div>
+            <p class="category-card__eyebrow"></p>
+            <h3></h3>
+            <div class="category-card__progress">
+              <div class="category-card__progress-top">
+                <span class="category-card__status"></span>
+                <span class="category-card__percent"></span>
+              </div>
+              <div class="category-card__bar">
+                <span class="category-card__fill"></span>
+              </div>
+            </div>
+          </div>
+          <div class="category-card__meta">
+            <span class="category-card__count"></span>
+            <span class="category-card__chevron" aria-hidden="true"></span>
+          </div>
+        </button>
+        <div class="category-card__body">
+          <p class="category-card__description"></p>
+          <div class="subgroups"></div>
+        </div>
+      </article>
+    </template>
+
+    <template id="subgroupTemplate">
+      <section class="subgroup">
+        <div class="subgroup__header">
+          <h4></h4>
+          <p></p>
+        </div>
+        <ul class="item-list"></ul>
+      </section>
+    </template>
+
+    <template id="itemTemplate">
+      <li class="item">
+        <label class="item__top">
+          <input type="checkbox" />
+          <span class="item__title"></span>
+        </label>
+        <ul class="item__details"></ul>
+        <div class="item__refs"></div>
+      </li>
+    </template>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
